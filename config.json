@@ -1,0 +1,70 @@
+{
+  "enabled": true,
+
+  "branch": "main",
+
+  "timezone": "Asia/Kolkata",
+
+  "activity": {
+    "weekday_probability": 0.88,
+    "saturday_probability": 0.78,
+    "sunday_probability": 0.68,
+
+    "commit_distribution": {
+      "0": 0.04,
+      "1": 0.05,
+      "2": 0.07,
+      "4": 0.10,
+      "6": 0.14,
+      "8": 0.16,
+      "11": 0.16,
+      "15": 0.14,
+      "18": 0.09,
+      "21": 0.05
+    }
+  },
+
+  "development_hours": {
+    "start": 8,
+    "end": 23,
+
+    "periods": [
+      {"name": "morning",   "start": "08:00", "end": "11:30", "weight": 0.25},
+      {"name": "afternoon", "start": "13:00", "end": "17:30", "weight": 0.35},
+      {"name": "evening",   "start": "19:00", "end": "23:00", "weight": 0.40}
+    ]
+  },
+
+  "burst": {
+    "enabled": true,
+    "probability": 0.12,
+    "min_days": 2,
+    "max_days": 4,
+    "multiplier": 1.5
+  },
+
+  "session": {
+    "cluster_probability": 0.30,
+    "min_gap_minutes": 5,
+    "max_gap_minutes": 45
+  },
+
+  "randomization": {
+    "seed": null
+  },
+
+  "commit": {
+    "prefix": "chore"
+  },
+
+  "realism": {
+    "min_score": 60,
+    "max_regeneration_attempts": 5
+  },
+
+  "safety": {
+    "allowed_paths": [".auto-commit/"],
+    "max_file_size_kb": 100,
+    "forbidden_patterns": [".env", "credentials", "secret", "token", "password", "key.pem", "id_rsa"]
+  }
+}

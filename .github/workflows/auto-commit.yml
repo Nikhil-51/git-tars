@@ -1,0 +1,62 @@
+name: Auto Commit
+
+on:
+  schedule:
+    # Run every 2 hours — the bot decides internally whether to commit.
+    # GitHub Actions cron uses UTC. The bot handles timezone conversion.
+    # Note: GitHub does not guarantee exact cron execution times.
+    - cron: '0 */2 * * *'
+
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Force run (bypass duplicate check)'
+        type: boolean
+        default: false
+      dry_run:
+        description: 'Dry run (no git changes)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "SaishNehe05"
+          git config user.email "saishnehe2006@gmail.com"
+
+      - name: Run Auto Commit Bot
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.force_run }}" = "true" ]; then
+            FLAGS="$FLAGS --force"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            FLAGS="$FLAGS --dry-run"
+          fi
+          python -m auto_commit.main $FLAGS
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate job summary
+        if: always()
+        run: python -m auto_commit.main --summary >> $GITHUB_STEP_SUMMARY

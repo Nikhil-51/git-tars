@@ -1,0 +1,13 @@
+{
+  "last_run": null,
+  "last_success": null,
+  "total_runs": 0,
+  "total_commits": 0,
+  "seed": null,
+  "burst_state": {
+    "active": false,
+    "end_date": null,
+    "multiplier": null
+  },
+  "commits_today": 0
+}
