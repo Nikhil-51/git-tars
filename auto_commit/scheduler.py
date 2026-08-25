@@ -180,25 +180,21 @@ def make_decision(
     # Determine remaining commits for today
     remaining_commits = day.commits[completed_today:] if not force else day.commits
 
-    # Filter commits that are due right now (scheduled time <= now)
-    commits_due = []
-    messages_due = []
-    for commit in remaining_commits:
-        if commit.time.time() <= now.time():
-            commits_due.append(commit.time)
-            messages_due.append(commit.message)
+    if not remaining_commits:
+        return ScheduleDecision(
+            should_commit=False,
+            commit_count=0,
+            is_burst=day.is_burst_day,
+            times=[],
+            messages=[],
+            seed=day_seed,
+            reason=f"All {len(day.commits)} scheduled commit(s) for today have been completed.",
+        )
 
-    # Fallback: if no remaining commit is due yet, but we haven't committed anything today
-    # or near the end of development hours, execute the next pending commit
-    if not commits_due and remaining_commits:
-        if completed_today == 0 or now.hour >= config.development_hours_end - 1:
-            commits_due = [remaining_commits[0].time]
-            messages_due = [remaining_commits[0].message]
-
-    # Limit per-run commits to at most 5 for realistic incremental updates
-    if not force and len(commits_due) > 5:
-        commits_due = commits_due[:5]
-        messages_due = messages_due[:5]
+    # Execute up to 5 pending commits per run so every run produces a high-volume contribution batch
+    batch_size = min(len(remaining_commits), 5)
+    commits_due = [c.time for c in remaining_commits[:batch_size]]
+    messages_due = [c.message for c in remaining_commits[:batch_size]]
 
     if not commits_due:
         next_time = remaining_commits[0].time.strftime("%H:%M") if remaining_commits else "later"
