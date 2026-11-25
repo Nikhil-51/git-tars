@@ -1,13 +1,13 @@
 {
-  "last_run": "2026-11-24",
-  "last_success": "2026-11-24",
-  "total_runs": 725,
-  "total_commits": 725,
-  "seed": 1607070920,
+  "last_run": "2026-11-25",
+  "last_success": "2026-11-25",
+  "total_runs": 726,
+  "total_commits": 726,
+  "seed": 768428059,
   "burst_state": {
-    "active": false,
+    "active": true,
     "end_date": null,
     "multiplier": null
   },
-  "commits_today": 11
+  "commits_today": 1
 }
